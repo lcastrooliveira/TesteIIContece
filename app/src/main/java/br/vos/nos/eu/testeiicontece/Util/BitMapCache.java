@@ -1,4 +1,4 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Util;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;

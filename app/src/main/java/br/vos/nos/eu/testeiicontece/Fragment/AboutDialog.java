@@ -1,10 +1,12 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
+import br.vos.nos.eu.testeiicontece.R;
 
 /**
  * Created by Lucas on 26/10/2015.

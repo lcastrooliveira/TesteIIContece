@@ -1,4 +1,4 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Activity;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -34,12 +32,23 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import br.vos.nos.eu.testeiicontece.Fragment.AboutDialog;
+import br.vos.nos.eu.testeiicontece.Fragment.ClientVolleyFragment;
+import br.vos.nos.eu.testeiicontece.Fragment.MovieListFragment;
+import br.vos.nos.eu.testeiicontece.Interface.MyFragmentInterface;
+import br.vos.nos.eu.testeiicontece.Interface.OnFragmentInteractionListener;
+import br.vos.nos.eu.testeiicontece.Interface.TmdbListener;
+import br.vos.nos.eu.testeiicontece.Model.Movie;
+import br.vos.nos.eu.testeiicontece.R;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener, TmdbListener {
 
     private ClientVolleyFragment clientVolleyFragment;
     private MyFragmentInterface<Movie> movieListFragment;
 
+    private String moviesJson;
+    private List<Movie> movies;
     private String selectedSource;
 
     public boolean isConnected() {
@@ -58,7 +67,11 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getFragmentManager();
         if (savedInstanceState != null) {
             selectedSource = savedInstanceState.getString("Source");
+            moviesJson = savedInstanceState.getString("MoviesJson");
             movieListFragment = (MyFragmentInterface) fm.findFragmentByTag("MovieFragmentTag");
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Movie>>() {}.getType();
+            movies = gson.fromJson(moviesJson, listType);
         } else if (movieListFragment == null) {
             movieListFragment = MovieListFragment.newInstance();
         }
@@ -143,6 +156,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, getResources().getString(R.string.action_settings), Toast.LENGTH_LONG);
             return true;
         }
 
@@ -162,7 +176,6 @@ public class MainActivity extends AppCompatActivity
             clientVolleyFragment.getMovieList("aws");
             selectedSource = "aws";
         } else if (id == R.id.nav_share) {
-            Toast.makeText(this,"share something",Toast.LENGTH_SHORT).show();
             shareContent();
         }
 
@@ -181,18 +194,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(String id) {
-        clientVolleyFragment.getMovieDetails(id, selectedSource);
+        if (selectedSource.equals("tmdb")) {
+            clientVolleyFragment.getMovieDetails(id);
+        } else {
+            Intent movieDetailsIntent = new Intent(this,MovieDetailsActivity.class);
+            movieDetailsIntent.putExtra("movie",movies.get(Integer.parseInt(id)));
+            startActivity(movieDetailsIntent);
+        }
     }
 
     @Override
     public void onTmdbMovieListResponse(JSONObject jsonObject) {
-
-        Log.i(MainActivity.class.getSimpleName(),jsonObject.toString());
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Movie>>() {}.getType();
-        List<Movie> movies;
         try {
-            movies = gson.fromJson(jsonObject.getString("results"), listType);
+            moviesJson = jsonObject.getString("results");
+            movies = gson.fromJson(moviesJson, listType);
             movieListFragment.update(movies);
         } catch (JSONException e) {
             Log.e("TesteIICOntece",e.getMessage());
@@ -206,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 Movie movie = new Movie();
                 movie.setTitle(jsonObject.getString("title"));
-                movie.setSynopsis(jsonObject.getString("overview"));
+                movie.setOverview(jsonObject.getString("overview"));
                 movieDetailsIntent.putExtra("movie",movie);
                 startActivity(movieDetailsIntent);
             } catch (JSONException e) {
@@ -218,6 +235,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString("Source", selectedSource);
+        savedInstanceState.putString("MoviesJson", moviesJson);
         super.onSaveInstanceState(savedInstanceState);
     }
 }

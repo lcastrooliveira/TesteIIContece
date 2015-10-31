@@ -1,16 +1,10 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Fragment;
 
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +15,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
+
+import br.vos.nos.eu.testeiicontece.Interface.TmdbListener;
+import br.vos.nos.eu.testeiicontece.Util.BitMapCache;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +31,7 @@ public class ClientVolleyFragment extends Fragment {
     private ImageLoader imageLoader = null;
     private BitMapCache bitMapCache = null;
 
-    private TmdbListener  tmdbListener;
+    private TmdbListener tmdbListener;
 
     public ClientVolleyFragment() {
         // Required empty public constructor
@@ -86,12 +83,24 @@ public class ClientVolleyFragment extends Fragment {
             });
             requestQueue.add(request);
         } else if (moviesSource.equals("aws")) {
-
+            String requestURL = "http://moises-movies3-dev.elasticbeanstalk.com/api/movies";
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestURL, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    tmdbListener.onTmdbMovieListResponse(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    tmdbListener.onTmdbMovieListResponse(null);
+                }
+            });
+            requestQueue.add(request);
         }
     }
 
-    public void getMovieDetails(String movieId, String moviesSource) {
-        if (moviesSource.equals("tmdb")) {
+    public void getMovieDetails(String movieId) {
             String requestUrl = base_URL + movieId + "?" + api_key;
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestUrl, null, new Response.Listener<JSONObject>() {
 
@@ -107,8 +116,5 @@ public class ClientVolleyFragment extends Fragment {
                 }
             });
             requestQueue.add(request);
-        } else if (moviesSource.equals("aws")) {
-
-        }
     }
 }
