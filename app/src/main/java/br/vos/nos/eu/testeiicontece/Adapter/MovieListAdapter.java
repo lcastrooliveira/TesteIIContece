@@ -1,4 +1,4 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
+
+import br.vos.nos.eu.testeiicontece.Model.Movie;
+import br.vos.nos.eu.testeiicontece.R;
 
 /**
  * Created by Lucas on 24/10/2015.
@@ -39,10 +42,14 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
             holder.release =(TextView)convertView.findViewById(R.id.movie_release);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
         Movie movie = this.getItem(position);
-        holder.thumbnail.setImageUrl(movie.getPoster_path(), imageLoader);
+        String source = "";
+        if (movie.getId() != null) {
+            source = "tmdb";
+        }
+        holder.thumbnail.setImageUrl(movie.getPoster_path(source), imageLoader);
         holder.rating.setRating(movie.getVote_average());
         holder.title.setText(movie.getTitle());
         holder.release.setText(movie.getRelease_date());

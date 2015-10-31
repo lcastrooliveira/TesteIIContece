@@ -1,4 +1,4 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.vos.nos.eu.testeiicontece.Adapter.MovieListAdapter;
+import br.vos.nos.eu.testeiicontece.Interface.MyFragmentInterface;
+import br.vos.nos.eu.testeiicontece.Interface.OnFragmentInteractionListener;
+import br.vos.nos.eu.testeiicontece.Model.Movie;
+import br.vos.nos.eu.testeiicontece.R;
 
 /**
  * A fragment representing a list of Items.
@@ -112,7 +118,11 @@ public class MovieListFragment extends Fragment implements AbsListView.OnItemCli
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(movies.get(position).getId());
+            String movieId = movies.get(position).getId();
+            if (movieId == null) {
+                movieId = String.valueOf(position);
+            }
+            mListener.onFragmentInteraction(movieId);
             selectedItemPosition = position;
         }
     }

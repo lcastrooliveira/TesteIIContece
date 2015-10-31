@@ -1,4 +1,4 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,7 +13,7 @@ public class Movie implements Parcelable {
     private String poster_path;
     private float vote_average;
     private String release_date;
-    private String synopsis;
+    private String overview;
 
     public Movie() {}
 
@@ -23,7 +23,7 @@ public class Movie implements Parcelable {
         poster_path = in.readString();
         vote_average = in.readFloat();
         release_date = in.readString();
-        synopsis = in.readString();
+        overview = in.readString();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -50,7 +50,7 @@ public class Movie implements Parcelable {
         out.writeString(poster_path);
         out.writeFloat(vote_average);
         out.writeString(release_date);
-        out.writeString(synopsis);
+        out.writeString(overview);
     }
 
     public String getTitle() {
@@ -69,11 +69,13 @@ public class Movie implements Parcelable {
         this.id = id;
     }
 
-    public String getPoster_path() {
+    public String getPoster_path(String source) {
         if (poster_path == null) {
             return "http://image.tmdb.org/t/p/w500/6cMPLU1jv8pG9BMmieXCHDTVRPm.jpg";
-        } else {
+        } else if (source.equals("tmdb")) {
             return "http://image.tmdb.org/t/p/w500/" + poster_path;
+        } else {
+            return poster_path;
         }
     }
 
@@ -97,11 +99,11 @@ public class Movie implements Parcelable {
         this.release_date = release_date;
     }
 
-    public String getSynopsis() {
-        return synopsis;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 }

@@ -5,14 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="acesso_menu_tmdb">Filmes TMDB</string>
-    <string name="acesso_menu_aws">Filmes AWS Ruby</string>
+    <string name="acesso_menu_aws">Filmes AWS</string>
     <string name="divulgue">Divulgue!!!</string>
     <string name="compartilhar">Compartilhar</string>
     <string name="sem_registros">Sem Registros. Verifique a sua conexão com a internet</string>
     <string name="share_message">Curtindo o workshop sobre Android com Integração de Amazon Web Services no #IIContece #Unioeste #PTI #IanGostoso</string>
     <string name="share_dialog_title">Ajude a divulgar o Workshop :)</string>
 
-    <string name="about_dialog_content">Criado por:\n Ian Nicolas\n Lucas de Castro Oliveira\n Lucas de Nathan de Oliveira</string>
+    <string name="about_dialog_content">Criado por:\n Ian Alves\n Lucas de Castro Oliveira\n Lucas Nathan Barbosa</string>
     <string name="ok">Ok</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

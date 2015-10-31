@@ -1,15 +1,14 @@
-package br.vos.nos.eu.testeiicontece;
+package br.vos.nos.eu.testeiicontece.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
+import br.vos.nos.eu.testeiicontece.Model.Movie;
+import br.vos.nos.eu.testeiicontece.R;
 
 
 public class MovieDetailsActivity extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if(movie != null) {
             movieTitle.setText(movie.getTitle());
-            movieSynopsis.setText(movie.getSynopsis());
+            movieSynopsis.setText(movie.getOverview());
         } else {
             movieTitle.setText("Titulo nao disponivel.");
             movieSynopsis.setText("Synopse nao disponivel.");
