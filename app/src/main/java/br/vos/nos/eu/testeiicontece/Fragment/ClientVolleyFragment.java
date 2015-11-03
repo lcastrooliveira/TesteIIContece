@@ -25,7 +25,7 @@ import br.vos.nos.eu.testeiicontece.Util.BitMapCache;
 public class ClientVolleyFragment extends Fragment {
 
     private String base_URL = "http://api.themoviedb.org/3/movie/";
-    private String api_key = "api_key=926c2332168d90489d1c08b8cdeedc6a";
+    private String api_key = "api_key=???";
 
     private RequestQueue requestQueue = null;
     private ImageLoader imageLoader = null;
